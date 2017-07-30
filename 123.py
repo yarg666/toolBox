@@ -5,7 +5,11 @@ cam = obj.createNode("cam","myCam")
 cam.setParms({"resx":1920,"resy":1080})
 cam.setParms({"tz":3,"ty":1.7})
 
-out = hou.node("/out")
+env = obj.createNode("env","myEnv")
+env.setParms ({"env_map":"$HFS/houdini/pic/DOSCH_SKIESV2_01SN_lowres.rat"})
 
+out = hou.node("/out")
 mantra = out.createNode("ifs","myMantra")
-mantra.setParms({""})
+mantra.setParms({"vm_renderengine":"pbrraytrace","camera":"/obj/myCam"})
+
+
