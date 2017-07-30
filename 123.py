@@ -12,4 +12,6 @@ out = hou.node("/out")
 mantra = out.createNode("ifs","myMantra")
 mantra.setParms({"vm_renderengine":"pbrraytrace","camera":"/obj/myCam"})
 
-
+shop = hou.node("/shop")
+mat = shop.createNode("principledshader","myMat")
+mat.setParms({"basecolorr":1,"basecolorg":1,"basecolorb":1})
