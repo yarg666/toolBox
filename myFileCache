@@ -16,3 +16,4 @@ for node in nodeSelect:
     myfile.setColor(pink)
     myWriteGeo= out.createNode("geometry",getName.upper()+"_CACHE")
     myWriteGeo.setParms({"soppath":"/obj/"+getName.upper()})
+ 
