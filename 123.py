@@ -1,15 +1,14 @@
-
 obj = hou.node("/obj")
 
 cam = obj.createNode("cam","myCam")
 cam.setParms({"resx":1920,"resy":1080})
 cam.setParms({"tz":3,"ty":1.7})
 
-env = obj.createNode("env","myEnv")
+env = obj.createNode("envlight","myEnv")
 env.setParms ({"env_map":"$HFS/houdini/pic/DOSCH_SKIESV2_01SN_lowres.rat"})
 
 out = hou.node("/out")
-mantra = out.createNode("ifs","myMantra")
+mantra = out.createNode("ifd","myMantra")
 mantra.setParms({"vm_renderengine":"pbrraytrace","camera":"/obj/myCam"})
 
 shop = hou.node("/shop")
