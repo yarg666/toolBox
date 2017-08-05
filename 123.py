@@ -5,7 +5,8 @@ cam.setParms({"resx":1920,"resy":1080})
 cam.setParms({"tz":3,"ty":1.7})
 
 geo1 = obj.createNode ("geo","myGeo")
-geo1.createNode ("null","pythonNull")
+file1 = hou.node("/obj/myGeo/file1")
+file1.destroy
 
 env = obj.createNode("envlight","myEnv")
 env.setParms ({"env_map":"$HFS/houdini/pic/DOSCH_SKIESV2_01SN_lowres.rat"})
