@@ -3,7 +3,6 @@ obj = hou.node("/obj")
 cam = obj.createNode("cam","myCam")
 cam.setParms({"resx":1920,"resy":1080})
 cam.setParms({"tz":3,"ty":1.7})
-cam.
 
 geo1 = obj.createNode ("geo","myGeo")
 file1 = hou.node("/obj/myGeo/file1")
