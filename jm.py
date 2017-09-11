@@ -3,18 +3,13 @@ def bound ():
     nodeSelect = hou.selectedNodes()
     black=hou.Color((0,0,0))
     pink=hou.Color((0.9,0.304,0.9))
-    #out= hou.node("/out")
 
     for node in nodeSelect:
-        #parent = hou.node("..")
-        #parentString =parent.name()    
         getName = node.name()
-        #connectNode = node.outputs()
         outNull = node.createOutputNode("null",getName+"_IN_BOUND")
         outNull.setPosition(node.position())
         outNull.move([0, -1])
         outNull.setColor(black)
-        #set read node to read myWriteGeo
         outBound= outNull.createOutputNode("null",getName+"_BOUND_CENTROID")
         outBound.setColor(pink)
         #add create param to outBound
@@ -24,8 +19,14 @@ def bound ():
         parm_folder.addParmTemplate(hou.FloatParmTemplate("centroid","Centroid",3))
         parm_group.append(parm_folder)
         outBound.setParmTemplateGroup(parm_group)
-        outBound.setParms({"boundx": hou.hscriptStringExpression('bbox("../",D_XSIZE)')})
 
+        outBound.parm('boundx').setExpression('bbox("../",D_XSIZE)')
+        outBound.parm('boundy').setExpression('bbox("../",D_YSIZE)')
+        outBound.parm('boundz').setExpression('bbox("../",D_ZSIZE)')
+
+        outBound.parm('centroidx').setExpression('centroid("../",D_X)')
+        outBound.parm('centroidy').setExpression('centroid("../",D_Y)')
+        outBound.parm('centroidz').setExpression('centroid("../",D_Z)')
 
 def cache ():
     import hou
