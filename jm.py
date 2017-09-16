@@ -36,7 +36,7 @@ def cache ():
     out= hou.node("/out")
 
     for node in nodeSelect:
-        parent = hou.node("..")
+        parent = node.parent()  #hou.node("..")
         parentString =parent.name()    
         getName = node.name()
         connectNode = node.outputs()
