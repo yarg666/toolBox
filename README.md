@@ -14,4 +14,4 @@ jm.addpoint // asset qui rajoute des point pour la foam
 
 jm.lowdensity // asset qui delete les points en fct de la densite
 
-
+jm.importabc // import les abc d'un dossier 
