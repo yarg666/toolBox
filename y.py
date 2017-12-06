@@ -1,3 +1,41 @@
+
+
+""" setup une start scene basique
+"""
+
+def unDeuxTrois():
+    import hou
+    obj = hou.node("/obj")
+
+    cam = obj.createNode("cam","myCam")
+    cam.setParms({"resx":1920,"resy":1080})
+    cam.setParms({"tz":3,"ty":1.7})
+
+    geo1 = obj.createNode ("geo","myGeo")
+    geo1.move([0, -2])
+    file1 = hou.node("/obj/myGeo/file1")
+    file1.destroy()
+      
+    env = obj.createNode("envlight","myEnv")
+    env.setParms ({"env_map":"$HFS/houdini/pic/DOSCH_SKIESV2_01SN_lowres.rat"})
+    env.move([0, 1])
+
+    out = hou.node("/out")
+    mantra = out.createNode("ifd","myMantra")
+    mantra.setParms({"vm_renderengine":"pbrraytrace","camera":"/obj/myCam"})
+
+    shop = hou.node("/shop")
+    mat = shop.createNode("principledshader","myMat")
+    mat.setParms({"basecolorr":1,"basecolorg":1,"basecolorb":1}) 
+
+
+""" setup the houdini desktop 
+"""
+def quatreCinqSix():
+    import hou
+    desktops_dict = dict((d.name(), d) for d in hou.ui.desktops())
+    desktops_dict['Technical'].setAsCurrent()
+
 """bound defini le bound box et le centroid d'un node"""
 
 def bound ():
@@ -30,12 +68,12 @@ def bound ():
         outBound.parm('centroidy').setExpression("centroid(opinputpath('.',0),D_Y)")
         outBound.parm('centroidz').setExpression("centroid(opinputpath('.',0),D_Z)")
 
-""" cache creer un rop output dans /out et le recharge dans le context d'origine
+""" cache cree un rop output dans /out et le recharge dans le context d'origine
 cela permet d'enchainer les depandences dans /out et de les relirent automatiquement
 dans dans le contexte d'origine
 """
 
-def cache ():
+def cacheBgeo ():
     import hou
     nodeSelect = hou.selectedNodes()
     black=hou.Color((0,0,0))
@@ -51,18 +89,61 @@ def cache ():
         outNull.setPosition(node.position())
         outNull.move([0, -.75])
         outNull.setColor(black)
+
         #set read node to read myWriteGeo
         myFile = outNull.createOutputNode("file",getName.upper()+"_CACHE")
         myFile.setColor(pink)
-        myFile.setParms({"file": "$"+"HIP/geo/$OS/v001/"+"$"+"OS."+"$"+"F5.bgeo.sc"})
-        #set myWriteGeo to cache the myFile
+        myFile.setParms({'file': '$HIP/cache/rop_sfx/bgeo.sc/$OS/v`padzero(3,chs("/out/$OS/version"))`/$OS.$F5.bgeo.sc'})
         myWriteGeo= out.createNode("geometry",getName.upper()+"_CACHE")
         myWriteGeo.setParms({"soppath":"/obj/"+parentString+"/"+getName.upper()})
-        myWriteGeo.setParms({"sopoutput":"$HIP/geo/$OS/v001/$OS.$F5.bgeo.sc"})
+        myWriteGeo.setParms({"sopoutput":"$HIP/cache/rop_sfx/bgeo.sc/$OS/v`padzero(3, ch('version'))`/$OS.$F5.bgeo.sc"})
         myWriteGeo.setParms({"trange":"normal"})
 
-""" filecache cree un super node filecache 
-qui ecrit la geo sans ce soucier du nom de fichier courant"""
+        #add create param for versionning
+        parm_group = myWriteGeo.parmTemplateGroup()
+        parm_folder = hou.FolderParmTemplate("folder","version")
+        parm_folder.addParmTemplate(hou.IntParmTemplate("version","Version",1))
+        parm_group.append(parm_folder)
+        myWriteGeo.setParmTemplateGroup(parm_group)
+
+
+def cacheVdb ():
+    import hou
+    nodeSelect = hou.selectedNodes()
+    black=hou.Color((0,0,0))
+    pink=hou.Color((0.9,0.304,0.9))
+    out= hou.node("/out")
+
+    for node in nodeSelect:
+        parent = node.parent()  #hou.node("..")
+        parentString =parent.name()    
+        getName = node.name()
+        connectNode = node.outputs()
+        outNull = node.createOutputNode("null",getName.upper())
+        outNull.setPosition(node.position())
+        outNull.move([0, -.75])
+        outNull.setColor(black)
+
+        #set read node to read myWriteGeo
+        myFile = outNull.createOutputNode("file",getName.upper()+"_CACHE")
+        myFile.setColor(pink)
+        myFile.setParms({'file': '$HIP/cache/rop_sfx/vdb/$OS/v`padzero(3,chs("/out/$OS/version"))`/$OS.$F5.vdb'})
+        myWriteGeo= out.createNode("geometry",getName.upper()+"_CACHE")
+        myWriteGeo.setParms({"soppath":"/obj/"+parentString+"/"+getName.upper()})
+        myWriteGeo.setParms({"sopoutput":"$HIP/cache/rop_sfx/vdb/$OS/v`padzero(3, ch('version'))`/$OS.$F5.vdb"})
+        myWriteGeo.setParms({"trange":"normal"})
+
+        #add create param for versionning
+        parm_group = myWriteGeo.parmTemplateGroup()
+        parm_folder = hou.FolderParmTemplate("folder","version")
+        parm_folder.addParmTemplate(hou.IntParmTemplate("version","Version",1))
+        parm_group.append(parm_folder)
+        myWriteGeo.setParmTemplateGroup(parm_group)
+        
+
+"""
+y.pywy genere un node python pour tester des scripts avec un bouton run script et c'est pratique
+"""
 
 def pywy ():
     import hou
