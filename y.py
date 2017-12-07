@@ -1,8 +1,12 @@
 
+"""setup scene to manual mode
+"""
+def manual():
+    import hou
+    hou.setUpdateMode(hou.updateMode.Manual)
 
 """ setup une start scene basique
 """
-
 def unDeuxTrois():
     import hou
     obj = hou.node("/obj")
