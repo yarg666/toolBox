@@ -1,12 +1,6 @@
 
 """setup scene to manual mode
 """
-helpy = "help|unDeuxTrois|quatreCinqSix|cacheBgeo|cacheVdb|pywy|normalizeGeoVex|camUvDelete"
-print (helpy)
-
-def help():
-    print (helpy)
-
 def manual():
     import hou
     hou.setUpdateMode(hou.updateMode.Manual)
@@ -198,6 +192,7 @@ vector centroid = (min+max)/2;;
 @P.y+=0.5; //normalize by max height
 
 @P*=ch('realScale'); //real scale"""}) 
+        print("--- Don't forget to just clic for create channels param in the wrangle node ---")
 
 
 def camUvDelete ():
@@ -215,6 +210,7 @@ float secu = 0.1;
 if(ndc.x+secu<0||ndc.x-secu>1||ndc.y+secu<0||ndc.y-secu>1||ndc.z>1){
 removepoint(geoself(),@ptnum);
 }"""}) 
+        print("--- Don't forget to check the campath in camUvdelete ---")
 
 def camUvDeleteAnim ():
     import hou
@@ -254,7 +250,7 @@ removepoint(geoself(),@ptnum);
         solverName = mysolver.name()
         mysolver.move([0, -1.5]) 
         mysolver.setInput(1,redColor)
-        mytransfert = hou.node("../"+solverName+"/d/s").createNode("attribtransfer","transferUv")
+        mytransfert = hou.node('/obj/'+parentString+'/'+solverName+'/d/s').createNode('attribtransfer','transferUv')
         hou.node('/obj/'+parentString+'/'+solverName+'/d/s/transferUv').setInput(0,hou.node('/obj/'+parentString+'/'+solverName+'/d/s/Prev_Frame'))
         hou.node('/obj/'+parentString+'/'+solverName+'/d/s/transferUv').setInput(1,hou.node('/obj/'+parentString+'/'+solverName+'/d/s/Input_2'))
         mytransfert.setDisplayFlag(True) #set display flag true
@@ -269,6 +265,8 @@ removepoint(geoself(),@ptnum);
 if(@Cd.x<0.5)removepoint(0,@ptnum);
 """}) 
         removePointVex.setDisplayFlag(True)
+
+        print("--- Don't forget to check the campath in camUvdelete ---")
 
 
 
