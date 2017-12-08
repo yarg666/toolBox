@@ -1,6 +1,12 @@
 
 """setup scene to manual mode
 """
+helpy = "help|unDeuxTrois|quatreCinqSix|cacheBgeo|cacheVdb|pywy|normalizeGeoVex|camUvDelete"
+print (helpy)
+
+def help():
+    print (helpy)
+
 def manual():
     import hou
     hou.setUpdateMode(hou.updateMode.Manual)
@@ -21,7 +27,7 @@ def unDeuxTrois():
     file1.destroy()
       
     env = obj.createNode("envlight","myEnv")
-    env.setParms ({"env_map":"$HFS/houdini/pic/DOSCH_SKIESV2_01SN_lowres.rat"})
+    env.setParms ({"env_map":"$HFS/houdini/pic/DOSCH_SKIESV2_01SN_lowres.rat"})  
     env.move([0, 1])
 
     out = hou.node("/out")
@@ -173,11 +179,96 @@ def pywy ():
         parm_group.append(parm_folder)
         pyNull.setParmTemplateGroup(parm_group)
 
+def normalizeGeoVex ():
+    import hou
+    nodeSelect = hou.selectedNodes()
+    pink=hou.Color ((0.9,0.304,0.9))
+
+    for node in nodeSelect:
+        wrangleSnippet=node.createOutputNode("attribwrangle","normalizeGeoVexByHeight")
+        wrangleSnippet.setColor(pink)
+        wrangleSnippet.setParms({"snippet":"""
+//center geo
+vector min, max;
+getbbox(0, min, max);
+vector centroid = (min+max)/2;;
+@P+= centroid*-1;
+
+@P*= 1/(max.y-min.y); //normalize by max height 
+@P.y+=0.5; //normalize by max height
+
+@P*=ch('realScale'); //real scale"""}) 
 
 
+def camUvDelete ():
+    import hou
+    nodeSelect = hou.selectedNodes()
+    pink=hou.Color ((0.9,0.304,0.9))
 
+    for node in nodeSelect:
+        wrangleSnippet=node.createOutputNode("attribwrangle","camUvDelete")
+        wrangleSnippet.setColor(pink)
+        wrangleSnippet.setParms({"snippet":"""
+vector ndc=toNDC(chs("camPath"),@P);
+@Cd = ndc; // viz
+float secu = 0.1;
+if(ndc.x+secu<0||ndc.x-secu>1||ndc.y+secu<0||ndc.y-secu>1||ndc.z>1){
+removepoint(geoself(),@ptnum);
+}"""}) 
 
+def camUvDeleteAnim ():
+    import hou
+    nodeSelect= hou.selectedNodes()
+    pink=hou.Color ((0.9,0.304,0.9))
+    black=hou.Color ((0,0,0))
 
+    for node in nodeSelect:
+        parent = node.parent()
+        parentString= parent.name()
+        getName= node.name()
+        connectNode = node.outputs()
+        outNull = node.createOutputNode("null","inCamDeleteAnim")
+        outNull.setPosition(node.position())
+        outNull.move([0, -.75])
+        outNull.setColor(black)
+        #create left branch
+        blackColor= outNull.createOutputNode("color","black")
+        blackColor.move([-.75, -.75])
+        blackColor.setParms({"colorr":0,"colorg":0,"colorb":0})
+        #create right branch
+        wrangleSnippet=outNull.createOutputNode("attribwrangle","camUvDelete")
+        wrangleSnippet.setColor(pink)
+        wrangleSnippet.setParms({"snippet":"""
+vector ndc=toNDC("/obj/root/transform/camera/cambaked/ppCam/ppCamShape",@P); // DONT FORGET TO FILL CAM PATH
+@Cd = ndc; // viz
+float secu = 0.1;
+if(ndc.x+secu<0||ndc.x-secu>1||ndc.y+secu<0||ndc.y-secu>1||ndc.z>1){
+removepoint(geoself(),@ptnum);
+}"""}) 
+        wrangleSnippet.move([0.75, -.75])
+        redColor= wrangleSnippet.createOutputNode("color","red")
+        redColor.move([0, -.35])
+        redColor.setParms({"colorr":1,"colorg":0,"colorb":0}) 
+        #create solver
+        mysolver = blackColor.createOutputNode("solver","transferColor")
+        solverName = mysolver.name()
+        mysolver.move([0, -1.5]) 
+        mysolver.setInput(1,redColor)
+        mytransfert = hou.node("../"+solverName+"/d/s").createNode("attribtransfer","transferUv")
+        hou.node('/obj/'+parentString+'/'+solverName+'/d/s/transferUv').setInput(0,hou.node('/obj/'+parentString+'/'+solverName+'/d/s/Prev_Frame'))
+        hou.node('/obj/'+parentString+'/'+solverName+'/d/s/transferUv').setInput(1,hou.node('/obj/'+parentString+'/'+solverName+'/d/s/Input_2'))
+        mytransfert.setDisplayFlag(True) #set display flag true
+        mytransfert.setParms({"thresholddist":0.1})
+        time = mysolver.createOutputNode("timeshift","Fend")
+        time.parm("frame").deleteAllKeyframes()
+        time.setParms({"frame":240})
+        
+        removePointVex=time.createOutputNode("attribwrangle","deleteGeo")
+        removePointVex.setColor(pink)
+        removePointVex.setParms({"snippet":"""
+if(@Cd.x<0.5)removepoint(0,@ptnum);
+"""}) 
+        removePointVex.setDisplayFlag(True)
 
 
 
