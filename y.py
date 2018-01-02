@@ -268,7 +268,15 @@ if(@Cd.x<0.5)removepoint(0,@ptnum);
 
         print("--- Don't forget to check the campath in camUvdelete ---")
 
-
+def inputColor ():
+    import hou
+    nodeSelect = hou.selectedNodes()
+    
+    for node in nodeSelect:
+        inputNode = node.inputs()
+        currentColor = node.color()
+        for n in inputNode:
+            n.setColor(currentColor)
 
 
 
