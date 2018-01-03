@@ -33,7 +33,7 @@ def unDeuxTrois():
     mat.setParms({"basecolorr":1,"basecolorg":1,"basecolorb":1}) 
 
 
-""" setup the houdini desktop 
+""" set the houdini desktop 
 """
 def quatreCinqSix():
     import hou
@@ -308,6 +308,44 @@ if(@Cd.x<0.5)removepoint(0,@ptnum);
 
         print("--- Don't forget to check the campath in camUvdelete ---")
 
+def fillHoles ():
+    import hou
+    nodeSelect = hou.selectedNodes()
+    pink=hou.Color ((0.9,0.304,0.9))
+
+    for node in nodeSelect:
+        wrangleSnippet=node.createOutputNode("attribwrangle","simpleFillHoles")
+        wrangleSnippet.setColor(pink)
+        wrangleSnippet.setParms({"snippet":"""
+float searchrad=ch("searchrad");
+float mindist=ch("mindist");
+int maxpoints=chi("maxpoints");
+int fillpoints=chi("fillpts");
+
+vector clpos;
+int handle=pcopen(0,"P",@P,searchrad,maxpoints+1);
+int i=0;
+while(pciterate(handle))
+{
+    if (i==0) // the first point found should be the closest, in this case, itself. We want to skip it.
+    {
+        i++;
+        continue;
+    }
+    pcimport(handle,"P",clpos);
+    if (length(@P-clpos)>mindist)
+    {
+        vector pointstep=(clpos-@P)/(fillpoints*2+1); // this ensures there are no duplicate point
+                                                     // at the cost of doubling the fill points number
+        for (int t=0;t<fillpoints;t++)
+            addpoint(0,@P+(pointstep*float(t+1)));
+    }
+}
+
+}"""}) 
+        print("--- Don't forget to create the channel ---")
+
+
 def inputColor ():
     import hou
     nodeSelect = hou.selectedNodes()
@@ -317,6 +355,7 @@ def inputColor ():
         currentColor = node.color()
         for n in inputNode:
             n.setColor(currentColor)
+
 
 
 
