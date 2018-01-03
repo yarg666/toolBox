@@ -308,7 +308,7 @@ if(@Cd.x<0.5)removepoint(0,@ptnum);
 
         print("--- Don't forget to check the campath in camUvdelete ---")
 
-def fillHoles ():
+def pointFillHoles ():
     import hou
     nodeSelect = hou.selectedNodes()
     pink=hou.Color ((0.9,0.304,0.9))
@@ -345,6 +345,25 @@ while(pciterate(handle))
 }"""}) 
         print("--- Don't forget to create the channel ---")
 
+def pointDeleteByDensity ():
+    import hou
+    nodeSelect = hou.selectedNodes()
+    pink=hou.Color ((0.9,0.304,0.9))
+
+    for node in nodeSelect:
+        wrangleSnippet=node.createOutputNode("attribwrangle","simpleFillHoles")
+        wrangleSnippet.setColor(pink)
+        wrangleSnippet.setParms({"snippet":"""
+int numPoint = chi("numPoint");
+
+int mypc = pcopen(0,"P",@P,chf("radius"),numPoint);
+
+@Cd= chramp("ramp",fit(pcnumfound(mypc),0,numPoint,0,1));
+
+if (@Cd.x<chf("seuilColor"))removepoint(0,@ptnum);
+"""}) 
+        print("--- Don't forget to create the channel ---")
+
 
 def inputColor ():
     import hou
@@ -355,6 +374,8 @@ def inputColor ():
         currentColor = node.color()
         for n in inputNode:
             n.setColor(currentColor)
+
+
 
 
 
