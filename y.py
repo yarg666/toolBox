@@ -103,7 +103,7 @@ def cacheBgeo ():
         myWriteGeo.setParms({"sopoutput":"$HIP/cache/rop_sfx/bgeo.sc/$OS/v`padzero(3, ch('version'))`/$OS.$F5.bgeo.sc"})
         myWriteGeo.setParms({"trange":"normal"})
 
-        #add create param for versionning
+        #add create param for versionning and export format
         parm_group = myWriteGeo.parmTemplateGroup()
         parm_folder = hou.FolderParmTemplate("folder","version")
         parm_folder.addParmTemplate(hou.IntParmTemplate("version","Version",1))
@@ -163,7 +163,7 @@ def pywy ():
         parm_folder = hou.FolderParmTemplate("folder","pywy")
         #button run code
         button=hou.ButtonParmTemplate("runcode","Run_Code")
-        button.setTags({"script_callback_language":"python","script_callback":"exec(kwargs['node'].parm('parm').eval())"})
+        button.setTags({"script_callback_language":"python","script_callback":"exec(kwargs['node'].parm('pythonCode').eval())"})
         parm_folder.addParmTemplate(button)
         #multistring
         multistring=hou.StringParmTemplate("pythonCode","PythonCode",1)         
@@ -268,7 +268,15 @@ if(@Cd.x<0.5)removepoint(0,@ptnum);
 
         print("--- Don't forget to check the campath in camUvdelete ---")
 
-
+def inputColor ():
+    import hou
+    nodeSelect = hou.selectedNodes()
+    
+    for node in nodeSelect:
+        inputNode = node.inputs()
+        currentColor = node.color()
+        for n in inputNode:
+            n.setColor(currentColor)
 
 
 
