@@ -39,6 +39,11 @@ def quatreCinqSix():
     import hou
     desktops_dict = dict((d.name(), d) for d in hou.ui.desktops())
     desktops_dict['Technical'].setAsCurrent()
+	
+    mode = hou.updateModeSetting().name()
+    if mode == 'AutoUpdate':
+        hou.setUpdateMode(hou.updateMode.Manual)
+
 
 """bound defini le bound box et le centroid d'un node"""
 
@@ -142,6 +147,41 @@ def cacheVdb ():
         parm_folder = hou.FolderParmTemplate("folder","version")
         parm_folder.addParmTemplate(hou.IntParmTemplate("version","Version",1))
         parm_group.append(parm_folder)
+        myWriteGeo.setParmTemplateGroup(parm_group)
+
+def cacheAbc ():
+    import hou
+    nodeSelect = hou.selectedNodes()
+    black=hou.Color((0,0,0))
+    pink=hou.Color((0.9,0.304,0.9))
+    out= hou.node("/out")
+
+    for node in nodeSelect:
+        parent = node.parent()  #hou.node("..")
+        parentString =parent.name()    
+        getName = node.name()
+        connectNode = node.outputs()
+        outNull = node.createOutputNode("null",getName.upper())
+        outNull.setPosition(node.position())
+        outNull.move([0, -.75])
+        outNull.setColor(black)
+
+        #set read node to read myWriteGeo
+        myFile = outNull.createOutputNode("alembic",getName.upper()+"_CACHE")
+        myFile.setColor(pink)
+        myFile.setParms({'fileName': '$HIP/cache/rop_sfx/abc/$OS/v`padzero(3,chs("/out/$OS/version"))`/$OS.abc'})
+        #set write geo in out context
+        myWriteGeo=out.createNode("alembic",getName.upper()+"_CACHE")
+        #set parm
+        myWriteGeo.setParms({"use_sop_path":1})
+        myWriteGeo.setParms({"sop_path":"/obj/"+parentString+"/"+getName.upper()})
+        myWriteGeo.setParms({"filename":"$HIP/cache/rop_sfx/abc/$OS/v`padzero(3, ch('version'))`/$OS.abc"})
+        myWriteGeo.setParms({"trange":"normal"})
+        #add create param for versionning
+        parm_group = myWriteGeo.parmTemplateGroup()
+        versionParm =hou.IntParmTemplate("version","Version",1)
+        target_folder = ("Main")
+        parm_group.appendToFolder(target_folder,versionParm)
         myWriteGeo.setParmTemplateGroup(parm_group)
         
 
