@@ -482,11 +482,141 @@ def inputSelectNode ():
     
 
 
-def importAbc () :
+def importAbcAsset ():
+    
+    """
+    import all alembic file from $HIP/abc/ in a new sop call alembicImport
+    """
+
     import hou
+    import os
+ 
+    
+    #set path
+    hipPath = hou.expandString('$HIP')
+    path = hipPath + "/abc/"
+    print (path)
+    
+    listPath = os.listdir(path)
+    
+    obj = hou.node("/obj")
+    alembicImport= obj.createNode ("geo","alembicImport")
+    
+    file1 = hou.node("/obj/alembicImport/file1")
+    file1.destroy()
+  
+    for n in listPath :
+        print (n)
+        currentFile=alembicImport.createNode("alembic",n)
+        #set fileName
+        currentFile.setParms({"fileName":"$"+"HIP/abc/"+n})
+
+    #reload geo callback
+    #prepa param
+    parm_group = alembicImport.parmTemplateGroup()
+    parm_folder = hou.FolderParmTemplate("folder","reload")
+    #button run code
+    button=hou.ButtonParmTemplate("reload","Reload")
+    button.setTags({"script_callback_language":"python","script_callback":"import y \ny.reloadAlembic()"})
+    parm_folder.addParmTemplate(button)
+    #append param
+    parm_group.append(parm_folder)
+    alembicImport.setParmTemplateGroup(parm_group)
+
+def reloadAlembic ():
+
+    import hou
+    import os
+    alembicImport= hou.node("/obj/alembicImport")
+    
+    children = alembicImport.children()
+    for n in children:
+        n.destroy()
+    
+    #set path
+    hipPath = hou.expandString('$HIP')
+    path = hipPath + "/abc/"
+    print (path)
+    
+    listPath = os.listdir(path)
+    
+    obj = hou.node("/obj")
+    alembicImport= hou.node("/obj/alembicImport")
+  
+    for n in listPath :
+        print (n)
+        currentFile=alembicImport.createNode("alembic",n)
+        #set fileName
+        currentFile.setParms({"fileName":"$"+"HIP/abc/"+n})
 
 
+def importGeoAsset ():
+    
+    """
+    import all geo file from $HIP/geo/ a file node ca read in a new sop call geoImport
+    """
 
+    import hou
+    import os
+ 
+    
+    #set path
+    hipPath = hou.expandString('$HIP')
+    path = hipPath + "/geo/"
+    print (path)
+    
+    listPath = os.listdir(path)
+    
+    obj = hou.node("/obj")
+    geoImport= obj.createNode ("geo","geoImport")
+
+    file1 = hou.node("/obj/geoImport/file1")
+    file1.destroy()
+  
+    for n in listPath :
+        print (n)
+        currentFile=geoImport.createNode("file",n)
+        #set fileName
+        currentFile.setParms({"file":"$"+"HIP/geo/"+n})
+    
+    #reload geo callback
+    #prepa param
+    parm_group = geoImport.parmTemplateGroup()
+    parm_folder = hou.FolderParmTemplate("folder","reload")
+    #button run code
+    button=hou.ButtonParmTemplate("reload","Reload")
+    button.setTags({"script_callback_language":"python","script_callback":"import y \ny.reloadGeo()"})
+    parm_folder.addParmTemplate(button)
+    #append param
+    parm_group.append(parm_folder)
+    geoImport.setParmTemplateGroup(parm_group)
+
+
+def reloadGeo ():
+
+    import hou
+    import os
+    geoImport= hou.node("/obj/geoImport")
+    
+    children = geoImport.children()
+    for n in children:
+        n.destroy()
+    
+    #set path
+    hipPath = hou.expandString('$HIP')
+    path = hipPath + "/geo/"
+    print (path)
+    
+    listPath = os.listdir(path)
+    
+    obj = hou.node("/obj")
+    geoImport= hou.node("/obj/geoImport")
+  
+    for n in listPath :
+        print (n)
+        currentFile=geoImport.createNode("file",n)
+        #set fileName
+        currentFile.setParms({"file":"$"+"HIP/geo/"+n})
 
 
 
