@@ -1,13 +1,25 @@
+print ("***for help type: help(y) ***")
 
-"""setup scene to manual mode
-"""
 def manual():
-    import hou
-    hou.setUpdateMode(hou.updateMode.Manual)
+    
+    """setup scene to manual mode
+    """
+    help(manual)
 
-""" setup une start scene basique
-"""
+    import hou
+    mode = hou.updateModeSetting().name()
+    if mode == 'AutoUpdate':
+        hou.setUpdateMode(hou.updateMode.Manual)
+    if mode == 'Manual':
+        hou.setUpdateMode(hou.updateMode.AutoUpdate)
+
 def unDeuxTrois():
+
+    """ setup une start scene basique
+    """
+   
+    help(unDeuxTrois)   
+
     import hou
     obj = hou.node("/obj")
 
@@ -33,9 +45,13 @@ def unDeuxTrois():
     mat.setParms({"basecolorr":1,"basecolorg":1,"basecolorb":1}) 
 
 
-""" set the houdini desktop 
-"""
 def quatreCinqSix():
+
+    """ set the houdini desktop 
+    """
+
+    help(quatreCinqSix)
+
     import hou
     desktops_dict = dict((d.name(), d) for d in hou.ui.desktops())
     desktops_dict['Technical'].setAsCurrent()
@@ -45,9 +61,13 @@ def quatreCinqSix():
         hou.setUpdateMode(hou.updateMode.Manual)
 
 
-"""bound defini le bound box et le centroid d'un node"""
 
 def geoBound ():
+
+    """return bound box and centroid"""
+
+    help(geoBound)
+
     import hou
     nodeSelect = hou.selectedNodes()
     black=hou.Color((0,0,0))
@@ -77,12 +97,14 @@ def geoBound ():
         outBound.parm('centroidy').setExpression("centroid(opinputpath('.',0),D_Y)")
         outBound.parm('centroidz').setExpression("centroid(opinputpath('.',0),D_Z)")
 
-""" cache cree un rop output dans /out et le recharge dans le context d'origine
-cela permet d'enchainer les depandences dans /out et de les relirent automatiquement
-dans dans le contexte d'origine
-"""
 
 def geoNormalizeGeoVex ():
+
+    """
+    normalize the size of the geo and move it to zero
+    """
+    help(geoNormalizeGeoVex)
+
     import hou
     nodeSelect = hou.selectedNodes()
     pink=hou.Color ((0.9,0.304,0.9))
@@ -104,6 +126,14 @@ vector centroid = (min+max)/2;;
         print("--- Don't forget to just clic for create channels param in the wrangle node ---")
 
 def cacheBgeo ():
+
+    """ cree un rop output dans /out et le recharge dans le context d'origine
+    cela permet d'enchainer les depandences dans /out et de les relires automatiquement
+    dans dans le contexte d'origine
+    """
+
+    help(cacheBgeo)
+
     import hou
     nodeSelect = hou.selectedNodes()
     black=hou.Color((0,0,0))
@@ -138,6 +168,14 @@ def cacheBgeo ():
 
 
 def cacheVdb ():
+
+    """ cree un rop output dans /out et le recharge dans le context d'origine
+    cela permet d'enchainer les depandences dans /out et de les relires automatiquement
+    dans dans le contexte d'origine
+    """
+
+    help(cacheVdb)
+
     import hou
     nodeSelect = hou.selectedNodes()
     black=hou.Color((0,0,0))
@@ -171,6 +209,14 @@ def cacheVdb ():
         myWriteGeo.setParmTemplateGroup(parm_group)
 
 def cacheAbc ():
+
+    """ cree un rop output dans /out et le recharge dans le context d'origine
+    cela permet d'enchainer les depandences dans /out et de les relires automatiquement
+    dans dans le contexte d'origine
+    """
+
+    help(cacheAbc)
+
     import hou
     nodeSelect = hou.selectedNodes()
     black=hou.Color((0,0,0))
@@ -206,11 +252,15 @@ def cacheAbc ():
         myWriteGeo.setParmTemplateGroup(parm_group)
         
 
-"""
-y.pywy genere un node python pour tester des scripts avec un bouton run script et c'est pratique
-"""
 
 def pywy ():
+
+    """
+    create a node to test code with python
+    """
+
+    help(pywy)
+
     import hou
     nodeSelect = hou.selectedNodes()
     pink=hou.Color ((0.9,0.304,0.9))
@@ -237,6 +287,12 @@ def pywy ():
 
 
 def camUvDelete ():
+
+    """
+    delete geo by camera range
+    """
+    help(camUvDelete)
+
     import hou
     nodeSelect = hou.selectedNodes()
     pink=hou.Color ((0.9,0.304,0.9))
@@ -254,6 +310,13 @@ removepoint(geoself(),@ptnum);
         print("--- Don't forget to check the campath in camUvdelete ---")
 
 def camUvDeleteAnim ():
+
+    """
+    delete geo by camera range also works with an animated camera
+    """
+
+    help(camUvDeleteAnim)
+
     import hou
     nodeSelect= hou.selectedNodes()
     pink=hou.Color ((0.9,0.304,0.9))
@@ -307,9 +370,17 @@ if(@Cd.x<0.5)removepoint(0,@ptnum);
 """}) 
         removePointVex.setDisplayFlag(True)
 
-        print("--- Don't forget to check the campath in camUvdelete ---")
+    print("--- Don't forget to check the campath in camUvdelete ---")
+
 
 def pointFillHoles ():
+
+    '''
+    add point between point if the distance between them is to big
+    '''
+
+    help(pointFillHoles)
+
     import hou
     nodeSelect = hou.selectedNodes()
     pink=hou.Color ((0.9,0.304,0.9))
@@ -344,9 +415,17 @@ while(pciterate(handle))
 }
 
 }"""}) 
-        print("--- Don't forget to create the channel ---")
+    print("--- Don't forget to create the channel ---")
+
 
 def pointDeleteByProximity ():
+
+    '''
+    if a point is to far from is neighbour then delete it
+    '''
+    
+    help(pointDeleteByProximity)
+
     import hou
     nodeSelect = hou.selectedNodes()
     pink=hou.Color ((0.9,0.304,0.9))
@@ -363,19 +442,44 @@ int mypc = pcopen(0,"P",@P,chf("radius"),numPoint);
 
 if (@Cd.x<chf("seuilColor"))removepoint(0,@ptnum);
 """}) 
-        print("--- Don't forget to create the channel ---")
-
+    
+    print("--- Don't forget to create the channel ---")
 
 def inputColor ():
+    """
+    set the color of inputs node to the color of the selected node
+    """
+
+    help(inputColor)
+
     import hou
     nodeSelect = hou.selectedNodes()
-    
+   
     for node in nodeSelect:
         inputNode = node.inputs()
         currentColor = node.color()
         for n in inputNode:
             n.setColor(currentColor)
 
+
+def inputSelectNode ():
+
+    """
+    select all inputs node of the selected node
+    usefull with a lot of merge node
+    """
+
+    help(inputSelectNode)
+
+    import hou
+    nodeSelect = hou.selectedNodes()
+    
+    for node in nodeSelect:
+        inputNode = node.inputs()
+        node.setSelected(False)
+        for n in inputNode:
+            n.setSelected(True)
+    
 
 
 def importAbc () :
