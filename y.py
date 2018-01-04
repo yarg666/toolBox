@@ -47,7 +47,7 @@ def quatreCinqSix():
 
 """bound defini le bound box et le centroid d'un node"""
 
-def bound ():
+def geoBound ():
     import hou
     nodeSelect = hou.selectedNodes()
     black=hou.Color((0,0,0))
@@ -81,6 +81,27 @@ def bound ():
 cela permet d'enchainer les depandences dans /out et de les relirent automatiquement
 dans dans le contexte d'origine
 """
+
+def geoNormalizeGeoVex ():
+    import hou
+    nodeSelect = hou.selectedNodes()
+    pink=hou.Color ((0.9,0.304,0.9))
+
+    for node in nodeSelect:
+        wrangleSnippet=node.createOutputNode("attribwrangle","normalizeGeoVexByHeight")
+        wrangleSnippet.setColor(pink)
+        wrangleSnippet.setParms({"snippet":"""
+//center geo
+vector min, max;
+getbbox(0, min, max);
+vector centroid = (min+max)/2;;
+@P+= centroid*-1;
+
+@P*= 1/(max.y-min.y); //normalize by max height 
+@P.y+=0.5; //normalize by max height
+
+@P*=ch('realScale'); //real scale"""}) 
+        print("--- Don't forget to just clic for create channels param in the wrangle node ---")
 
 def cacheBgeo ():
     import hou
@@ -213,26 +234,6 @@ def pywy ():
         parm_group.append(parm_folder)
         pyNull.setParmTemplateGroup(parm_group)
 
-def normalizeGeoVex ():
-    import hou
-    nodeSelect = hou.selectedNodes()
-    pink=hou.Color ((0.9,0.304,0.9))
-
-    for node in nodeSelect:
-        wrangleSnippet=node.createOutputNode("attribwrangle","normalizeGeoVexByHeight")
-        wrangleSnippet.setColor(pink)
-        wrangleSnippet.setParms({"snippet":"""
-//center geo
-vector min, max;
-getbbox(0, min, max);
-vector centroid = (min+max)/2;;
-@P+= centroid*-1;
-
-@P*= 1/(max.y-min.y); //normalize by max height 
-@P.y+=0.5; //normalize by max height
-
-@P*=ch('realScale'); //real scale"""}) 
-        print("--- Don't forget to just clic for create channels param in the wrangle node ---")
 
 
 def camUvDelete ():
@@ -345,13 +346,13 @@ while(pciterate(handle))
 }"""}) 
         print("--- Don't forget to create the channel ---")
 
-def pointDeleteByDensity ():
+def pointDeleteByProximity ():
     import hou
     nodeSelect = hou.selectedNodes()
     pink=hou.Color ((0.9,0.304,0.9))
 
     for node in nodeSelect:
-        wrangleSnippet=node.createOutputNode("attribwrangle","simpleFillHoles")
+        wrangleSnippet=node.createOutputNode("attribwrangle","pointDeleteByProximity")
         wrangleSnippet.setColor(pink)
         wrangleSnippet.setParms({"snippet":"""
 int numPoint = chi("numPoint");
@@ -375,6 +376,10 @@ def inputColor ():
         for n in inputNode:
             n.setColor(currentColor)
 
+
+
+def importAbc () :
+    import hou
 
 
 
