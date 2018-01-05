@@ -624,7 +624,7 @@ def reloadGeo ():
 
 def fileQuitAndSave():
     """
-    save, change scene mode in manual, and exit 
+    change scene mode in manual, save, and exit 
     """
     help(fileQuitAndSave)
     import hou
@@ -636,7 +636,7 @@ def fileQuitAndSave():
     hou.exit(exit_code=0, suppress_save_prompt=False)
 
 def fileSaveAndLoad():
-    """ save, change scene mode in manual, and open open windows"""
+    """change scene mode in manual, save, and open open windows"""
 
     help (fileSaveAndLoad)
 
