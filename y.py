@@ -488,6 +488,8 @@ def importAbcAsset ():
     import all alembic file from $HIP/abc/ in a new sop call alembicImport
     """
 
+    help(importAbcAsset)
+
     import hou
     import os
  
@@ -553,8 +555,10 @@ def reloadAlembic ():
 def importGeoAsset ():
     
     """
-    import all geo file from $HIP/geo/ a file node ca read in a new sop call geoImport
+    import all geo file from $HIP/geo/ in a new sop call geoImport
     """
+
+    help(importGeoAsset)
 
     import hou
     import os
@@ -576,7 +580,7 @@ def importGeoAsset ():
     for n in listPath :
         print (n)
         currentFile=geoImport.createNode("file",n)
-        #set fileName
+        #set fileNames
         currentFile.setParms({"file":"$"+"HIP/geo/"+n})
     
     #reload geo callback
@@ -617,6 +621,34 @@ def reloadGeo ():
         currentFile=geoImport.createNode("file",n)
         #set fileName
         currentFile.setParms({"file":"$"+"HIP/geo/"+n})
+
+def fileQuitAndSave():
+    """
+    save, change scene mode in manual, and exit 
+    """
+    help(fileQuitAndSave)
+    import hou
+    
+    mode = hou.updateModeSetting().name()
+    if mode == 'AutoUpdate':
+        hou.setUpdateMode(hou.updateMode.Manual)
+    hou.hipFile.save(file_name=None, save_to_recent_files=True)
+    hou.exit(exit_code=0, suppress_save_prompt=False)
+
+def fileSaveAndLoad()
+    """
+    save, change scene mode in manual, and open load window 
+    """
+    help (fileSaveAndLoad)
+
+    import hou
+    
+    mode = hou.updateModeSetting().name()
+    if mode == 'AutoUpdate':
+        hou.setUpdateMode(hou.updateMode.Manual)
+    hou.hipFile.save(file_name=None, save_to_recent_files=True)
+    hou.hipFile.load(file_name, suppress_save_prompt=False, ignore_load_warnings=False) 
+
 
 
 
