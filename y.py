@@ -635,10 +635,9 @@ def fileQuitAndSave():
     hou.hipFile.save(file_name=None, save_to_recent_files=True)
     hou.exit(exit_code=0, suppress_save_prompt=False)
 
-def fileSaveAndLoad()
-    """
-    save, change scene mode in manual, and open load window 
-    """
+def fileSaveAndLoad():
+    """ save, change scene mode in manual, and open open windows"""
+
     help (fileSaveAndLoad)
 
     import hou
@@ -646,8 +645,10 @@ def fileSaveAndLoad()
     mode = hou.updateModeSetting().name()
     if mode == 'AutoUpdate':
         hou.setUpdateMode(hou.updateMode.Manual)
+        
     hou.hipFile.save(file_name=None, save_to_recent_files=True)
-    hou.hipFile.load(file_name, suppress_save_prompt=False, ignore_load_warnings=False) 
+    f=hou.ui.selectFile()
+    hou.hipFile.load(f) 
 
 
 
