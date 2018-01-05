@@ -650,6 +650,26 @@ def fileSaveAndLoad():
     f=hou.ui.selectFile()
     hou.hipFile.load(f) 
 
+def fileOpenExplorer():
+    """open explorer at $HIP path"""
+    help(fileOpenExplorer)
+    
+    import hou
+    import os
+    import platform
+    import subprocess
+
+    path = hou.expandString("$HIP")
+
+    print(path)
+    if platform.system() == "Windows":
+        os.startfile(path)
+    elif platform.system() == "Darwin":
+        subprocess.Popen(["open", path])
+    else:
+        subprocess.Popen(["xdg-open", path])
+
+
 
 
 
