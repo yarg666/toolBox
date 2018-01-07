@@ -674,6 +674,18 @@ def fileOpenExplorer():
     else:
         subprocess.Popen(["xdg-open", path])
 
+def fileMaker():
+    import os
+    path = hou.expandString("$HIP")
+   #path = path.replace('\\', '/')
+   
+    structure = ["abc","geo","screenShot"]
+    
+    for n in structure:
+        dossiers = path + '/'+ n 
+        os.makedirs(dossiers)
+        print (dossiers)
+
 
 
 
