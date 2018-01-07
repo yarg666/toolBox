@@ -627,7 +627,7 @@ def reloadGeo ():
         #set fileName
         currentFile.setParms({"file":"$"+"HIP/geo/"+n})
 
-def fileQuitAndSave():
+def fileExit():
     """
     change scene mode in manual, save, and exit 
     """
@@ -640,7 +640,7 @@ def fileQuitAndSave():
     hou.hipFile.save(file_name=None, save_to_recent_files=True)
     hou.exit(exit_code=0, suppress_save_prompt=False)
 
-def fileSaveAndLoad():
+def fileOpen():
     """change scene mode in manual, save, and open open windows"""
 
     help (fileOpen)
@@ -675,16 +675,21 @@ def fileOpenExplorer():
         subprocess.Popen(["xdg-open", path])
 
 def fileMaker():
+    """Create some basic folder at root $HIP"""
     import os
+    from os.path import exists
+
     path = hou.expandString("$HIP")
-   #path = path.replace('\\', '/')
-   
-    structure = ["abc","geo","screenShot"]
+    structure = ["abc","geo","screenShot","cache","render","source","ref"]
+    
     
     for n in structure:
-        dossiers = path + '/'+ n 
-        os.makedirs(dossiers)
-        print (dossiers)
+        if exists(path + '/'+ n):
+            continue
+        else:
+            dossiers = path + '/'+ n 
+            os.makedirs(dossiers)
+            print (dossiers)
 
 
 
