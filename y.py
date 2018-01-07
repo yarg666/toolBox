@@ -1,3 +1,8 @@
+# script to do
+# arborescnece de dossier: y.fileMaker
+# screenShot flipbook : y.screenShot
+
+
 print ("***for help type: help(y) ***")
 
 def manual():
@@ -626,7 +631,7 @@ def fileQuitAndSave():
     """
     change scene mode in manual, save, and exit 
     """
-    help(fileQuitAndSave)
+    help(fileExit)
     import hou
     
     mode = hou.updateModeSetting().name()
@@ -638,7 +643,7 @@ def fileQuitAndSave():
 def fileSaveAndLoad():
     """change scene mode in manual, save, and open open windows"""
 
-    help (fileSaveAndLoad)
+    help (fileOpen)
 
     import hou
     
@@ -652,7 +657,7 @@ def fileSaveAndLoad():
 
 def fileOpenExplorer():
     """open explorer at $HIP path"""
-    help(fileOpenExplorer)
+    help(fileBrowse)
     
     import hou
     import os
