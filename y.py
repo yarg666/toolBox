@@ -686,7 +686,7 @@ def fileOpen():
 
 def fileOpenExplorer():
     """open explorer at $HIP path"""
-    help(fileBrowse)
+    help(fileOpenExplorer)
     
     import hou
     import os
