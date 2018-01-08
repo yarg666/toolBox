@@ -1,6 +1,6 @@
 # script to do
-# arborescnece de dossier: y.fileMaker
-# screenShot flipbook : y.screenShot
+# arborescnece de dossier: y.fileMaker DONE
+# screenShot flipbook : y.screenShot 
 
 
 print ("***for help type: help(y) ***")
@@ -103,7 +103,7 @@ def geoBound ():
         outBound.parm('centroidz').setExpression("centroid(opinputpath('.',0),D_Z)")
 
 
-def geoNormalizeGeoVex ():
+def geoNormalizeGeoYVex ():
 
     """
     normalize the size of the geo and move it to zero
@@ -129,6 +129,35 @@ vector centroid = (min+max)/2;;
 
 @P*=ch('realScale'); //real scale"""}) 
         print("--- Don't forget to just clic for create channels param in the wrangle node ---")
+
+def geoNormalizeGeoMaxSize ():
+
+    """
+    normalize by max size and centroid
+    """
+    help(geoNormalizeGeoVex)
+
+    import hou
+    nodeSelect = hou.selectedNodes()
+    pink=hou.Color ((0.9,0.304,0.9))
+
+    for node in nodeSelect:
+        wrangleSnippet=node.createOutputNode("attribwrangle","normalizeGeoVexByHeight")
+        wrangleSnippet.setColor(pink)
+        wrangleSnippet.setParms({"snippet":"""
+//center geo
+vector min, max;
+getbbox(0, min, max);
+vector centroid = (min+max)/2;;
+@P+= centroid*-1;
+
+@P*= 1/(max(max.x-min.x,max.y-min.y,max.z-min.z)); //normalize by max size
+@P*=2;"""}) 
+        
+
+
+
+
 
 def cacheBgeo ():
 
@@ -676,6 +705,7 @@ def fileOpenExplorer():
 
 def fileMaker():
     """Create some basic folder at root $HIP"""
+    import hou
     import os
     from os.path import exists
 
@@ -690,9 +720,4 @@ def fileMaker():
             dossiers = path + '/'+ n 
             os.makedirs(dossiers)
             print (dossiers)
-
-
-
-
-
 
