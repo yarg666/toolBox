@@ -543,7 +543,7 @@ def importAbcAsset ():
     file1 = hou.node("/obj/alembicImport/file1")
     file1.destroy()
   
-    for n in listPath :
+    for n in listPath:
         print (n)
         currentFile=alembicImport.createNode("alembic",n)
         #set fileName
@@ -723,3 +723,51 @@ def fileMaker():
             os.makedirs(dossiers)
             print (dossiers)
 
+
+def screenShot ():
+
+    """take a screen shot of the current viewport at the current frame"""
+
+    import hou
+    import toolutils
+    import os
+
+    #selected node
+    nodeSelect = hou.selectedNodes()
+    path = hou.expandString("$HIP")
+    #name check there is a node selected
+    if len(nodeSelect)<1:
+        name = "debug"
+    else:
+        for node in nodeSelect:
+            name = node.name()
+            
+    #Get the current Desktop
+    desktop = hou.ui.curDesktop()
+    # Get the scene viewer
+    scene= toolutils.sceneViewer()
+    flipbook_options = scene.flipbookSettings().stash()
+    # set frame range
+    flipbook_options.frameRange( ($F, $F) )
+
+    # auto increment
+    root =  "{1}/{2}/{0}/".format(name,path,"screenShot")
+
+    listPath = os.listdir(root)
+
+    outputPath = "{0}.{1}.jpg".format(root,"00000")
+
+    for e in listPath :
+
+    if os.path.exists(outputPath):
+     #  i= os.path.splitext(outputPath) [0]
+        i=outputPath.split(".") [1]
+        i= int (i)*10
+        print (i)
+        outputPath = "{1}/{2}/{0}.{3}.jpg".format(name,path,"screenShot",i)
+            
+    flipbook_options.output(outputPath)
+
+
+    #run flipbook
+    scene.flipbook(scene.curViewport(),flipbook_options)
