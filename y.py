@@ -724,50 +724,43 @@ def fileMaker():
             print (dossiers)
 
 
-def screenShot ():
-
+def screenShot():
     """take a screen shot of the current viewport at the current frame"""
-
+    help(screenShot)
     import hou
     import toolutils
     import os
-
     #selected node
     nodeSelect = hou.selectedNodes()
     path = hou.expandString("$HIP")
-    #name check there is a node selected
-    if len(nodeSelect)<1:
-        name = "debug"
+    #name check there is a node selected 
+    if len(nodeSelect)<1: 
+        print("select a node")
+        exit()
     else:
         for node in nodeSelect:
             name = node.name()
-            
+            print("name") 
     #Get the current Desktop
     desktop = hou.ui.curDesktop()
     # Get the scene viewer
     scene= toolutils.sceneViewer()
     flipbook_options = scene.flipbookSettings().stash()
     # set frame range
-    flipbook_options.frameRange( ($F, $F) )
-
-    # auto increment
+    flipbook_options.frameRange( ($F, $F) 
+    #set output path
     root =  "{1}/{2}/{0}/".format(name,path,"screenShot")
-
-    listPath = os.listdir(root)
-
-    outputPath = "{0}.{1}.jpg".format(root,"00000")
-
-    for e in listPath :
-
-    if os.path.exists(outputPath):
-     #  i= os.path.splitext(outputPath) [0]
-        i=outputPath.split(".") [1]
-        i= int (i)*10
-        print (i)
-        outputPath = "{1}/{2}/{0}.{3}.jpg".format(name,path,"screenShot",i)
-            
+    if os.path.exists(root):
+        print("exist")
+        listPath = os.listdir(root)
+        inc = len(listPath)   
+        print (inc)
+        outputPath = "{0}{2}.{1}.jpg".format(root,inc,name)
+        print outputPath
+    else:
+        print("dont exist")
+        os.makedirs(root)
     flipbook_options.output(outputPath)
-
-
     #run flipbook
     scene.flipbook(scene.curViewport(),flipbook_options)
+    #http://www.sidefx.com/docs/houdini/hom/hou/NetworkImage.html
