@@ -1,7 +1,9 @@
 # script to do
 # arborescnece de dossier: y.fileMaker DONE
 # screenShot flipbook : y.screenShot 
-
+# sauvegarde toutes les previz du render view: y.previzSave
+# set up de shading avec shading ball et environment : y.shadingBall y.123
+# ajouter une node remote control avec smoke resolution et flip resolution : 123.py
 
 print ("***for help type: help(y) ***")
 
@@ -108,7 +110,7 @@ def geoNormalizeGeoYVex ():
     """
     normalize the size of the geo and move it to zero
     """
-    help(geoNormalizeGeoVex)
+    help(geoNormalizeGeoYVex)
 
     import hou
     nodeSelect = hou.selectedNodes()
@@ -135,7 +137,7 @@ def geoNormalizeGeoMaxSize ():
     """
     normalize by max size and centroid
     """
-    help(geoNormalizeGeoVex)
+    help(geoNormalizeGeoMaxSize)
 
     import hou
     nodeSelect = hou.selectedNodes()
