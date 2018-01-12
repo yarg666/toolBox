@@ -733,34 +733,50 @@ def screenShot():
     #selected node
     nodeSelect = hou.selectedNodes()
     path = hou.expandString("$HIP")
+    frame = hou.expandString("$F")
+    frame = int(frame)
+    black=hou.Color((0,0,0))
     #name check there is a node selected 
     if len(nodeSelect)<1: 
-        print("select a node")
-        exit()
+        print ("!!!    error: select a node    !!!")
     else:
         for node in nodeSelect:
             name = node.name()
-            print("name") 
-    #Get the current Desktop
-    desktop = hou.ui.curDesktop()
-    # Get the scene viewer
-    scene= toolutils.sceneViewer()
-    flipbook_options = scene.flipbookSettings().stash()
-    # set frame range
-    flipbook_options.frameRange( ($F, $F) 
-    #set output path
-    root =  "{1}/{2}/{0}/".format(name,path,"screenShot")
-    if os.path.exists(root):
-        print("exist")
-        listPath = os.listdir(root)
-        inc = len(listPath)   
-        print (inc)
-        outputPath = "{0}{2}.{1}.jpg".format(root,inc,name)
-        print outputPath
-    else:
-        print("dont exist")
-        os.makedirs(root)
-    flipbook_options.output(outputPath)
-    #run flipbook
-    scene.flipbook(scene.curViewport(),flipbook_options)
-    #http://www.sidefx.com/docs/houdini/hom/hou/NetworkImage.html
+            node.setColor(black)
+
+        #Get the current Desktop
+        desktop = hou.ui.curDesktop()
+        # Get the scene viewer
+        scene= toolutils.sceneViewer()
+        flipbook_options = scene.flipbookSettings().stash()
+        # set frame range
+        flipbook_options.frameRange((frame,frame)) 
+        #set output path
+        root ="{1}/{2}/{0}/".format(name,path,"screenShot")
+        if os.path.exists(root):
+            listPath = os.listdir(root)
+            inc = len(listPath)
+            inc = int(inc)   
+            outputPath = "{}{}.{:04d}.jpg".format(root,name,inc)
+
+        else:
+            print("dont exist")
+            os.makedirs(root)
+            inc = 0
+            outputPath = "{}{}.{:04d}.jpg".format(root,name,inc)
+
+     
+        flipbook_options.output(outputPath)
+        #run flipbook
+        scene.flipbook(scene.curViewport(),flipbook_options)
+
+        print (outputPath)
+        editor = hou.ui.paneTabOfType(hou.paneTabType.NetworkEditor)
+        image = hou.NetworkImage()
+        image.setRelativeToPath(node.path()) 
+        image.setPath(outputPath)
+        image.setRect(hou.BoundingRect(0, 0, 5, 5))
+        editor.setBackgroundImages([image])
+
+
+
