@@ -772,11 +772,16 @@ def screenShot():
 
         print (outputPath)
         editor = hou.ui.paneTabOfType(hou.paneTabType.NetworkEditor)
-        image = hou.NetworkImage()
-        image.setRelativeToPath(node.path()) 
+        image = hou.NetworkImage() 
         image.setPath(outputPath)
         image.setRect(hou.BoundingRect(0, 0, 5, 5))
+        image.setRelativeToPath(node.path())
         editor.setBackgroundImages([image])
+        image.setRect(hou.BoundingRect(0, 0, 5, 5))
+        editor.setBackgroundImages([image])
+
+
+        
 
 
 
