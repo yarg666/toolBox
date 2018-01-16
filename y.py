@@ -1,9 +1,12 @@
 # script to do
 # arborescnece de dossier: y.fileMaker DONE
-# screenShot flipbook : y.screenShot 
-# sauvegarde toutes les previz du render view: y.previzSave
+# screenShot flipbook : y.screenShot ALLMOST DONE 
+# bug l'image ce disparrait quand on change de vue. (un peu relou)
+# sauvegarde toutes les previz du render view: y.previzSave 
+# enregistre toutes les images et les supprimes de la fenetre de rendu 
 # set up de shading avec shading ball et environment : y.shadingBall y.123
 # ajouter une node remote control avec smoke resolution et flip resolution : 123.py
+# search in hip file if there is a node call "." : y.searchByNodeName
 
 print ("***for help type: help(y) ***")
 
@@ -730,20 +733,19 @@ def screenShot():
     import hou
     import toolutils
     import os
-    #selected node
+    #selected node set variables and color
     nodeSelect = hou.selectedNodes()
     path = hou.expandString("$HIP")
     frame = hou.expandString("$F")
     frame = int(frame)
     black=hou.Color((0,0,0))
-    #name check there is a node selected 
+    #check if there is a node selected 
     if len(nodeSelect)<1: 
         print ("!!!    error: select a node    !!!")
     else:
         for node in nodeSelect:
             name = node.name()
             node.setColor(black)
-
         #Get the current Desktop
         desktop = hou.ui.curDesktop()
         # Get the scene viewer
@@ -758,26 +760,20 @@ def screenShot():
             inc = len(listPath)
             inc = int(inc)   
             outputPath = "{}{}.{:04d}.jpg".format(root,name,inc)
-
         else:
-            print("dont exist")
             os.makedirs(root)
             inc = 0
-            outputPath = "{}{}.{:04d}.jpg".format(root,name,inc)
-
-     
+            outputPath = "{}{}.{:04d}.jpg".format(root,name,inc) 
         flipbook_options.output(outputPath)
         #run flipbook
         scene.flipbook(scene.curViewport(),flipbook_options)
-
         print (outputPath)
+        # reload image in the current network view next to the selected node
         editor = hou.ui.paneTabOfType(hou.paneTabType.NetworkEditor)
         image = hou.NetworkImage() 
         image.setPath(outputPath)
         image.setRect(hou.BoundingRect(0, 0, 5, 5))
         image.setRelativeToPath(node.path())
-        editor.setBackgroundImages([image])
-        image.setRect(hou.BoundingRect(0, 0, 5, 5))
         editor.setBackgroundImages([image])
 
 
