@@ -6,6 +6,8 @@
 # set up de shading avec shading ball et environment : y.shadingBall y.123
 # ajouter une node remote control avec smoke resolution et flip resolution : 123.py
 
+print ("---- Bonjour Michael ! ----")
+
 print ("***for help type: help(y) ***")
 
 def manual():
