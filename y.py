@@ -1,4 +1,5 @@
-# script to do
+
+#hello badre# script to do
 # arborescnece de dossier: y.fileMaker DONE
 # screenShot flipbook : y.screenShot 
 # sauvegarde toutes les previz du render view: y.previzSave
@@ -743,7 +744,6 @@ def screenShot():
         for node in nodeSelect:
             name = node.name()
             node.setColor(black)
-
         #Get the current Desktop
         desktop = hou.ui.curDesktop()
         # Get the scene viewer
@@ -758,18 +758,15 @@ def screenShot():
             inc = len(listPath)
             inc = int(inc)   
             outputPath = "{}{}.{:04d}.jpg".format(root,name,inc)
-
         else:
-            print("dont exist")
             os.makedirs(root)
             inc = 0
             outputPath = "{}{}.{:04d}.jpg".format(root,name,inc)
-
-     
+        #set flipbook current path     
         flipbook_options.output(outputPath)
         #run flipbook
         scene.flipbook(scene.curViewport(),flipbook_options)
-
+        # reload image
         print (outputPath)
         editor = hou.ui.paneTabOfType(hou.paneTabType.NetworkEditor)
         image = hou.NetworkImage() 
@@ -777,8 +774,7 @@ def screenShot():
         image.setRect(hou.BoundingRect(0, 0, 5, 5))
         image.setRelativeToPath(node.path())
         editor.setBackgroundImages([image])
-        image.setRect(hou.BoundingRect(0, 0, 5, 5))
-        editor.setBackgroundImages([image])
+
 
 
         
