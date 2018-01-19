@@ -1,5 +1,5 @@
 
-#hello badre# script to do
+# script to do
 # arborescnece de dossier: y.fileMaker DONE
 # screenShot flipbook : y.screenShot 
 # sauvegarde toutes les previz du render view: y.previzSave
@@ -37,9 +37,21 @@ def unDeuxTrois():
     cam.setParms({"resx":1920,"resy":1080})
     cam.setParms({"tz":3,"ty":1.7})
 
-    geo1 = obj.createNode ("geo","myGeo")
+    resSim = obj.createNode("null","resSim")
+    resSim.setDisplayFlag(False)
+
+    parm_group = resSim.parmTemplateGroup()
+    parm_folder = hou.FolderParmTemplate("folder","resSim")
+    parm_folder.addParmTemplate(hou.FloatParmTemplate("flipSim","flipSim",1))
+    parm_folder.addParmTemplate(hou.FloatParmTemplate("pyroSim","pyroSim",1))
+    parm_group.append(parm_folder)
+    resSim.setParmTemplateGroup(parm_group)
+
+
+
+    geo1 = obj.createNode ("geo","source")
     geo1.move([0, -2])
-    file1 = hou.node("/obj/myGeo/file1")
+    file1 = hou.node("/obj/source/file1")
     file1.destroy()
       
     env = obj.createNode("envlight","myEnv")
