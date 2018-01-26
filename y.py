@@ -1,10 +1,10 @@
 
 # script to do
-# arborescnece de dossier: y.fileMaker DONE
-# screenShot flipbook : y.screenShot 
-# sauvegarde toutes les previz du render view: y.previzSave
+
+# screenShot flipbook : y.screenShot bloque
+# sauvegarde toutes les previz du render view: y.previzSave // tricky
 # set up de shading avec shading ball et environment : y.shadingBall y.123
-# ajouter une node remote control avec smoke resolution et flip resolution : 123.py
+
 
 print ("---- Bonjour Michael ! ----")
 
@@ -75,8 +75,11 @@ def quatreCinqSix():
     help(quatreCinqSix)
 
     import hou
+
+    #decrire la configuration du desktop avec python
+    # close treeView close python open spreadsheet,chage parameter to python 
     desktops_dict = dict((d.name(), d) for d in hou.ui.desktops())
-    desktops_dict['Technical'].setAsCurrent()
+    desktops_dict['Technical2'].setAsCurrent()
 	
     mode = hou.updateModeSetting().name()
     if mode == 'AutoUpdate':
@@ -84,16 +87,16 @@ def quatreCinqSix():
 
 
 
-def geoBound ():
+def bound():
 
     """return bound box and centroid"""
 
-    help(geoBound)
+    help(bound)
 
     import hou
     nodeSelect = hou.selectedNodes()
     black=hou.Color((0,0,0))
-    pink=hou.Color((0.9,0.304,0.9))
+    pink=hou.Color((0.98,0.275,0.275))
 
     for node in nodeSelect:
         getName = node.name()
@@ -120,16 +123,38 @@ def geoBound ():
         outBound.parm('centroidz').setExpression("centroid(opinputpath('.',0),D_Z)")
 
 
-def geoNormalizeGeoYVex ():
+def rotTool():
+
+    """
+    help rotate scatter with orient attribute
+    """
+    help(rotTool)
+
+    import hou
+    nodeSelect = hou.selectedNodes()
+    pink=hou.Color((0.98,0.275,0.275))
+
+    for node in nodeSelect:
+        wrangleSnippet=node.createOutputNode("attribwrangle","rotTool")
+        wrangleSnippet.setColor(pink)
+        wrangleSnippet.setParms({"snippet":"""
+
+matrix myTransform= maketransform(0,0,chv("t"),chv("r"),chv("s"),chv("p")); // translate rotate scale pivot
+@orient = quaternion(matrix3(myTransform)); 
+
+"""}) 
+        print("--- Don't forget create channels parameter in the wrangle node ---")
+
+def normalizeGeoYVex ():
 
     """
     normalize the size of the geo and move it to zero
     """
-    help(geoNormalizeGeoYVex)
+    help(normalizeGeoYVex)
 
     import hou
     nodeSelect = hou.selectedNodes()
-    pink=hou.Color ((0.9,0.304,0.9))
+    pink=hou.Color((0.98,0.275,0.275))
 
     for node in nodeSelect:
         wrangleSnippet=node.createOutputNode("attribwrangle","normalizeGeoVexByHeight")
@@ -147,16 +172,16 @@ vector centroid = (min+max)/2;;
 @P*=ch('realScale'); //real scale"""}) 
         print("--- Don't forget to just clic for create channels param in the wrangle node ---")
 
-def geoNormalizeGeoMaxSize ():
+def normalizeGeoMaxSize ():
 
     """
     normalize by max size and centroid
     """
-    help(geoNormalizeGeoMaxSize)
+    help(normalizeGeoMaxSize)
 
     import hou
     nodeSelect = hou.selectedNodes()
-    pink=hou.Color ((0.9,0.304,0.9))
+    pink=hou.Color((0.98,0.275,0.275))
 
     for node in nodeSelect:
         wrangleSnippet=node.createOutputNode("attribwrangle","normalizeGeoVexByHeight")
@@ -188,7 +213,7 @@ def cacheBgeo ():
     import hou
     nodeSelect = hou.selectedNodes()
     black=hou.Color((0,0,0))
-    pink=hou.Color((0.9,0.304,0.9))
+    pink=hou.Color((0.98,0.275,0.275))
     out= hou.node("/out")
 
     for node in nodeSelect:
@@ -230,7 +255,7 @@ def cacheVdb ():
     import hou
     nodeSelect = hou.selectedNodes()
     black=hou.Color((0,0,0))
-    pink=hou.Color((0.9,0.304,0.9))
+    pink=hou.Color((0.98,0.275,0.275))
     out= hou.node("/out")
 
     for node in nodeSelect:
@@ -271,7 +296,7 @@ def cacheAbc ():
     import hou
     nodeSelect = hou.selectedNodes()
     black=hou.Color((0,0,0))
-    pink=hou.Color((0.9,0.304,0.9))
+    pink=hou.Color((0.98,0.275,0.275))
     out= hou.node("/out")
 
     for node in nodeSelect:
@@ -314,7 +339,7 @@ def pywy ():
 
     import hou
     nodeSelect = hou.selectedNodes()
-    pink=hou.Color ((0.9,0.304,0.9))
+    pink=hou.Color((0.98,0.275,0.275))
 
     for node in nodeSelect:
         #create node from selected node
@@ -346,7 +371,7 @@ def camUvDelete ():
 
     import hou
     nodeSelect = hou.selectedNodes()
-    pink=hou.Color ((0.9,0.304,0.9))
+    pink=hou.Color((0.98,0.275,0.275))
 
     for node in nodeSelect:
         wrangleSnippet=node.createOutputNode("attribwrangle","camUvDelete")
@@ -370,7 +395,7 @@ def camUvDeleteAnim ():
 
     import hou
     nodeSelect= hou.selectedNodes()
-    pink=hou.Color ((0.9,0.304,0.9))
+    pink=hou.Color((0.98,0.275,0.275))
     black=hou.Color ((0,0,0))
 
     for node in nodeSelect:
@@ -434,7 +459,7 @@ def pointFillHoles ():
 
     import hou
     nodeSelect = hou.selectedNodes()
-    pink=hou.Color ((0.9,0.304,0.9))
+    pink=hou.Color((0.98,0.275,0.275))
 
     for node in nodeSelect:
         wrangleSnippet=node.createOutputNode("attribwrangle","simpleFillHoles")
@@ -479,7 +504,7 @@ def pointDeleteByProximity ():
 
     import hou
     nodeSelect = hou.selectedNodes()
-    pink=hou.Color ((0.9,0.304,0.9))
+    pink=hou.Color((0.98,0.275,0.275))
 
     for node in nodeSelect:
         wrangleSnippet=node.createOutputNode("attribwrangle","pointDeleteByProximity")
@@ -673,11 +698,11 @@ def reloadGeo ():
         #set fileName
         currentFile.setParms({"file":"$"+"HIP/geo/"+n})
 
-def fileExit():
+def exit():
     """
     change scene mode in manual, save, and exit 
     """
-    help(fileExit)
+    help(exit)
     import hou
     
     mode = hou.updateModeSetting().name()
@@ -686,10 +711,10 @@ def fileExit():
     hou.hipFile.save(file_name=None, save_to_recent_files=True)
     hou.exit(exit_code=0, suppress_save_prompt=False)
 
-def fileOpen():
+def open():
     """change scene mode in manual, save, and open open windows"""
 
-    help (fileOpen)
+    help (open)
 
     import hou
     
@@ -701,9 +726,9 @@ def fileOpen():
     f=hou.ui.selectFile()
     hou.hipFile.load(f) 
 
-def fileOpenExplorer():
+def explorer():
     """open explorer at $HIP path"""
-    help(fileOpenExplorer)
+    help(explorer)
     
     import hou
     import os
@@ -788,6 +813,7 @@ def screenShot():
         image.setRect(hou.BoundingRect(0, 0, 5, 5))
         image.setRelativeToPath(node.path())
         editor.setBackgroundImages([image])
+
 
 
 
