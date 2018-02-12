@@ -2,6 +2,8 @@
 # script to do
 
 # screenShot flipbook : y.screenShot bloque
+#y.render set un node mantra 
+# merge la geo selection dans un nouveau node qui sera linker au node mantra
 # sauvegarde toutes les previz du render view: y.previzSave // tricky
 # set up de shading avec shading ball et environment : y.shadingBall y.123
 
@@ -449,13 +451,13 @@ if(@Cd.x<0.5)removepoint(0,@ptnum);
     print("--- Don't forget to check the campath in camUvdelete ---")
 
 
-def pointFillHoles ():
+def fillHoles ():
 
     '''
     add point between point if the distance between them is to big
     '''
 
-    help(pointFillHoles)
+    help(fillHoles)
 
     import hou
     nodeSelect = hou.selectedNodes()
@@ -489,8 +491,7 @@ while(pciterate(handle))
             addpoint(0,@P+(pointstep*float(t+1)));
     }
 }
-
-}"""}) 
+"""}) 
     print("--- Don't forget to create the channel ---")
 
 
